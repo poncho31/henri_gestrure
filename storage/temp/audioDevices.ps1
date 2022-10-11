@@ -1,0 +1,1 @@
+Get-Process  | Where-Object {$_.ProcessName -like '*vlc*'} | Select-Object ProcessName, Id, CPU | ConvertTo-Json

@@ -1,0 +1,80 @@
+[CREATE]
+==PROJECT
+composer create-project --prefer-dist laravel/laravel=5.5 SitePik
+
+==CONTROLLER
+php artisan make:controller WelcomeController
+php artisan make:controller UserController --resource => Permet de créer un contrôleur RESTful
+
+==Creation requête formulaire
+php artisan make:request ContactRequest
+
+== Création vues / assets / routes pour l'authentification
+php artisan make:auth
+
+==MIDDLEWARE
+php artisan make:middleware Admin
+
+==VIEW
+php artisan view:clear‌ => Permet de regénérer les vues
+
+==DATABASE
+php artisan migrate:install
+php artisan make:migration create_tableName_table
+php artisan migrate
+php artisan migrate:reset
+-- si erreur : php artisan migrate:rollback
+-- si erreur : php artisan migrate:refresh [rollback et relance de toutes les migrations]
+
+==ORM (eloquent)
+php artisan make:model Email -- création model de table
+--ou
+php artisan make:model App\Models\Entities\MonModele
+
+==COMMAND
+php artisan make:command ModelMakeCommand
+
+== SEED
+php artisan db::seed
+-ou
+php artisan migrate --seed
+
+== MULTIPLE CREATE COMMAND
+php artisan make:model Todo -mcr
+php artisan make:model Todo -a
+
+==CLEAR
+php artisan view:clear
+php artisan config:cache
+php artisan route:cache
+
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+
+php artisan optimize
+
+
+==SCHEDULE && JOBS
+php artisan schedule:list
+php artisan schedule:run  => prévu pour les tests : va lancer la commande schedule:run toute les minutes
+php artisan schedule:work
+php artisan schedule:clear-cache
+php artisan schedule:finish {id} {code=0}
+
+[RUN]
+php artisan serve
+php artisan route:list
+
+npm run watch
+
+
+[THIS APP]
+php artisan passport:install
+php artisan key:generate
+php artisan passport:client --password
+
+php artisan storage:link
+
+[Run specific job]
+php artisan queue:work --queue=NOMDUJOB --timeout=0 --stop-when-empty
