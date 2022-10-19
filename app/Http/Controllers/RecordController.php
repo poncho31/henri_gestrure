@@ -26,31 +26,9 @@ class RecordController extends Controller
         $this->record     = new Record();
     }
 
-    public function recordAudio(Request $request, string $action, string $id): int|string|null
+    public function recordAudio(): int|string|null
     {
-        $data = new \stdClass();
-        $data->user = $request->user();
-        $data->name     = "RECORDER_".($data->user ? $request->user()->id : 0) ."_".date('Ymd_H_i_s').".mp3";
-        $data->fullpath = public_path('files\\audio\\') .$data->name;
-        if($action==='run'){
-            if($request->input('canRecord')){
-                $this->record->create($data->fullpath);
-                $data->record =   $this->audio->recordAudio($data->fullpath,'proc_open');
-            }
-            else{
-                $data->error = "CANNOT RUN";
-            }
-        }
-        elseif ($action==="stop"){
-            // stop audio
-        }
-        else{
-            $data->error = "NONE";
-        }
-
-//        dd($data);
-        return response($data, empty($data->error)?200:301);
-
+        return (new AudioRecording(getmypid()))->recordAudio();
     }
 
     public function killProcess(Request $request){

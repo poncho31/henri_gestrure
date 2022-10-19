@@ -24,7 +24,6 @@
             {{ $records->all->links() }}
         </div>
     </div>
-    </div>
 {{--    --}}{{-- AUDIO PLAYER --}}
 {{--    @include('audioplayer')--}}
 @endsection

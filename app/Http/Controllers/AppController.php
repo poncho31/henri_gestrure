@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Record;
+use App\Sources\AudioPlayer\AudioPlayer;
+use App\Sources\AudioPlayer\Players\Player;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
@@ -26,8 +28,10 @@ class AppController extends Controller
         return view("app", compact('records'));
     }
 
-    public function streamaudio(): View|Factory|Application
+    public function streamaudio()
     {
-        return \view('streamaudio');
+        $record = new Record();
+        $record->fullpath =  public_path('files/audio/template.mp3');
+        return $stream = (new Player())->streamVlc($record);
     }
 }

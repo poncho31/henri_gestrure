@@ -11,8 +11,8 @@ class AudioRecording
 
     private int $processId;
 
-    public function __construct(int $processId){
-        $this->processId = $processId;
+    public function __construct(?int $processId = null){
+        $this->processId = $processId ?? getmypid();
     }
 
 
@@ -26,6 +26,7 @@ class AudioRecording
      */
     public function recordAudio(Record $record, string $type='proc_open',bool $isInBackground = true, bool $debug = false): Record
     {
+        $record->processId = $this->processId;
         // BEGIN : INIT
         dump("BEGIN RECORDING : ", $time=round(microtime(true), 4));
         $record->category = $record->category?? 'default';

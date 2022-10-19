@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\RecordController;
+use App\Http\Livewire\RecordLivewire;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::match(['GET'], '/'                      , [AppController::class,    'index'      ]);
-Route::match(['POST'],'/recorder/{action}/{id}', [RecordController::class, 'recordAudio'        ]);
-Route::match(['POST'],'/stream/audio'          , [AppController::class,    'streamaudio'])->name('stream.audio');
+Route::match(['GET'], '/'                      , [AppController::class,    'index'       ]);
+Route::match(['POST'],'/recorder/{action}/{id}', [RecordController::class, 'recordAudio' ]);
+Route::match(['POST'],'/action/{action}/{id}'  , [RecordLivewire::class,     'test'      ]);
+Route::match(['POST'],'/stream/audio'          , [AppController::class,    'streamaudio' ])->name('stream.audio');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

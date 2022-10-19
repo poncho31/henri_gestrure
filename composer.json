@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
         "ohseesoftware/laravel-vite-manifest": "^1.2",
-        "pusher/pusher-php-server": "^7.2"
+        "pusher/pusher-php-server": "^7.2",
+      "ext-apache": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
