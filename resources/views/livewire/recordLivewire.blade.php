@@ -2,165 +2,117 @@
 <div>
 
 
+
     <div class="gridRecorder">
 {{--        NOM DE L'ENREGISTREMENT --}}
-        <div class="firstRow name">
-            <input
-                type="text"
-                value="{{$recordModel->name ?? 'Nom de l\'enregistrement' }}"
-                name="recordCreate{{$recordModel->id}}"
-                class="input is-primary is-small text-center"
-                style=""
-            >
+        <div class="firstRow name" id="ZonTitle">
+            <label>
+                <input
+                    type="text"
+                    value="{{$recordModel->name ?? 'Nom de l\'enregistrement' }}"
+                    name="recordCreate{{$recordModel->id}}"
+                    class="input is-primary is-small text-center"
+                    style=""
+                >
+            </label>
         </div>
 {{--        PROCESS--}}
-        <div class="firstRow process">
+        <div class="firstRow process" id="ZoneProcess">
             <button
                 wire:click="stopAudio()"
-                class=""
+                class="input is-primary is-small text-center"
             >
                 Process : {{$recordModel->processId}}
             </button>
         </div>
 {{--        CATEGORY--}}
-        <div class="firstRow category">
-            <label> Category
-                <input wire:model="recordModel.category" type="text" value="{{$recordModel->category}}">
+        <div class="firstRow category" id="ZoneCategory">
+            <label>
+                <input
+                    wire:model="recordModel.category"
+                    type="text"
+                    value="{{$recordModel->category ?? 'category'}}"
+                    class="input is-primary is-small text-center"
+                >
             </label>
         </div>
 {{--        EXECUTION--}}
-        <div class="firstRow execution">
+        <div class="firstRow execution" id="ZoneExecution">
             <label>
-                Execution
-                <input type="text" value="{{json_encode($recordModel->options)}}">
+                <input
+                    type="text"
+                    value="{{$recordModel->options !== null ?json_encode($recordModel->options) : 'ececutions'}}"
+                    class="input is-primary is-small text-center"
+                >
             </label>
         </div>
 {{--        PATH--}}
-        <div class="firstRow path">
+        <div class="firstRow path" id="ZonePath">
             <label>
-                Path
-                <input type="text" value="{{$recordModel->path }}">
+                <input
+                    type="text"
+                    value="{{$recordModel->path ?? 'path' }}"
+                    class="input is-primary is-small text-center"
+                >
             </label>
         </div>
 {{--        PROCESS--}}
-        <div class="firstRow type">
+        <div class="firstRow type" id="ZoneProcess">
             <label>
-                Process
-                <input type="text" value="{{$recordModel->processName }}">
+                <input
+                    type="text"
+                    value="{{$recordModel->processName ?? 'process' }}"
+                    class="input is-primary is-small text-center"
+                >
             </label>
         </div>
 {{--        DEVICE--}}
-        <div class="firstRow input1">
+        <div class="firstRow input1" id="ZoneDevice">
             <label>
-                Device
-                <input type="text" value="{{$recordModel->deviceName }}">
+                <input
+                    type="text"
+                    value="{{$recordModel->deviceName ?? 'device' }}"
+                    class="input is-primary is-small text-center"
+                >
             </label>
         </div>
 
 {{--        RECORD--}}
-        <div class="secondRow record">Record</div>
+        <div class="secondRow record" id="ZoneRecord" >
+            {{--    RUN --}}
+            @if(!$recordModel->isRunning)
+                <button  id="runRecord{{$recordModel->id}}"
+                         data-id="{{$recordModel->id}}"
+                         data-url="{{url('recorder/run/'.$recordModel->id)}}"
+                         class="recorder runRecord button is-success h-16"
+                         wire:click="recordAudio()"
+                >
+                    Play Record
+                </button>
+            @else
+                {{--    STOP--}}
+                <button id="stopRecord{{$recordModel->id}}"
+                        data-id="{{$recordModel->id}}"
+                        data-url="{{url('recorder/stop/'.$recordModel->id)}}"
+                        class="recorder stopRecord button is-danger h-16"
+                        wire:click="stopAudio()"
+                >
+                    Stop record {{$recordModel->processId ?? '--Erreur--'}}
+                </button>
+            @endif
+        </div>
 {{--        INFOS--}}
-        <div class="secondRow information">Infos</div>
+        <div class="secondRow information" id="ZoneInfo">
+             <span id="recordInfo{{$recordModel->id}}" class="icon has-text-info" title="informaition">
+                 <i class="fa fa-info-circle"></i>
+             </span>
+            <span id="recordError{{$recordModel->id}}" class="icon has-text-warning" title="Warning">
+                <i class="fa fa-exclamation-triangle"></i>
+            </span>
+        </div>
 {{--        PLAYER--}}
-        <div class="secondRow player">Player</div>
-{{--        GRAPHE--}}
-        <div class="secondRow graphPlayer">Graphique player</div>
-{{--        OUTPUT--}}
-        <div class="thirdRow output">Output</div>
-    </div>
-
-    <div class="pure-table record table-container" data-id="{{$recordModel->id}}"  >
-        <table class="table ">
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr id="recorderFirstLine">
-                {{--    Nom du record--}}
-                <td id="ZoneTitle" colspan="5">
-                    <label>
-                        <input type="text"
-                               value="{{$recordModel->name }}"
-                               name="recordCreate{{$recordModel->id}}"
-                               class="input is-primary is-small text-center"
-                            {{--                           style="width: 35%; margin: 5px;"--}}
-                        >
-                    </label>
-                </td>
-                <td colspan="3"><button wire:click="stopAudio()">Process : {{$recordModel->processId}}</button></td>
-                <td colspan="2" title="catégorie">
-                    <label>
-                        <input wire:model="recordModel.category" type="text" value="{{$recordModel->category}}">
-                    </label>
-                </td>
-                <td colspan="2">
-                    {{--                {{json_encode($recordModel->options??'', JSON_PRETTY_PRINT)}}--}}
-                    {!! \App\Sources\Utils\BladeHelpers::makeDropdownList($recordModel->options!== null ? $recordModel->options['execution']??[] : [], 'Executions') !!}
-                </td>
-                <td colspan="3" style="overflow: hidden">
-                    {{$recordModel->path }}
-                </td>
-                <td colspan="1" style="overflow: auto">{{$recordModel->processName}}</td>
-                <td colspan="3" style="overflow: auto">{{$recordModel->deviceName}}</td>
-            </tr>
-            <tr id="recorderSecondLine">
-                {{--   RECORD --}}
-                <td id="ZoneRecord" colspan="2">
-                    {{--    RUN --}}
-                    @if(!$recordModel->isRunning)
-                        <button  id="runRecord{{$recordModel->id}}"
-                                 data-id="{{$recordModel->id}}"
-                                 data-url="{{url('recorder/run/'.$recordModel->id)}}"
-                                 class="recorder runRecord button is-success h-16"
-                                 wire:click="recordAudio()"
-                        >
-                            Play Record
-                        </button>
-                    @else
-                        {{--    STOP--}}
-                        <button id="stopRecord{{$recordModel->id}}"
-                                data-id="{{$recordModel->id}}"
-                                data-url="{{url('recorder/stop/'.$recordModel->id)}}"
-                                class="recorder stopRecord button is-danger h-16"
-                                wire:click="stopAudio()"
-                        >
-                            Stop record {{$recordModel->processId ?? '--Erreur--'}}
-                        </button>
-                    @endif
-                </td>
-                {{--            INFOS / ERRROR--}}
-                <td id="ZoneInfo" colspan="1">
-                 <span id="recordInfo{{$recordModel->id}}" class="icon has-text-info" title="informaition">
-                   <i class="fa fa-info-circle"></i>
-                 </span>
-
-                    <span id="recordError{{$recordModel->id}}" class="icon has-text-warning" title="Warning">
-                   <i class="fa fa-exclamation-triangle"></i>
-                 </span>
-                </td>
-
-                {{--    AUDIO PLAYER--}}
-
-                URL : "http://localhost:8080/stream/{{$recordModel->name}}"
-                <td id="ZoneAudioPlayer" colspan="4" controls >
-                <span  >
+        <div class="secondRow player" id="ZoneAudioPlayer">
+                 <span  >
                      <div id="audio-player-container playRecord" >
                          <div class="audio">
                                  <h2>Sound Information</h2>
@@ -178,37 +130,52 @@
                          </div>
                      </div>
                  </span>
-
-                </td>
-
-                {{-- GRAPHE AUDIO --}}
-                <td id="ZoneGraphePlayer" colspan="13" rowspan="2">
-                <span id="audioGraph{{$recordModel->id}}"  >
-                    ZONE GRAPHE PLAYER
-                </span>
-                </td>
-            </tr>
-            {{--        OUTPUT--}}
-            <tr id="recorderThirdLine">
-                <td colspan="7" id="ZoneOutput">
-                    <div id="output{{$recordModel->id}}">
+        </div>
+{{--        GRAPHE--}}
+        <div class="secondRow graphPlayer">
+             <span id="audioGraph{{$recordModel->id}}"  >
+                 ZONE GRAPHE PLAYER
+             </span>
+        </div>
+{{--        OUTPUT--}}
+        <div class="thirdRow output" id="zo">
+            <label for="output{{$recordModel->id}}"></label>
+            <textarea
+                id="output{{$recordModel->id}}"
+                style="width: 100%; height: 100%"
+            >
                         ZONE OUTPUT N° {{$recordModel->id}}
-                        {{$output}}
-                    </div>
-                </td>
-                <td colspan="13" ></td>
-            </tr>
-        </table>
-
-
+                {{$output}}
+            </textarea>
+        </div>
     </div>
 
+
+
+
+{{--    TEST MODAL--}}
+    <button class="js-modal-trigger" data-target="modal-js-example">
+        Open JS example modal
+    </button>
+    <div id="modal-js-example" class="modal">
+        <div class="modal-background"></div>
+
+        <div class="modal-content">
+            <div class="box">
+                <p>Modal JS example</p>
+                <!-- Your content -->
+            </div>
+        </div>
+
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
 </div>
 @push('js')
     <script>
         $(document).ready(function() {
+            // $('.modal').on()
             var audioElement = document.createElement('audio');
-            $('.audio'.on('click', function(){
+            $('.audio').on('click', function(){
                 $.ajax({
                     url: '{{url('stream/audio')}}',
                     type: "POST",
@@ -227,7 +194,7 @@
 
                     }
                 });
-            }))
+            })
 
 
             audioElement.addEventListener("canplay",function(){
@@ -257,52 +224,6 @@
 
             })
         })
-
-        {{--function hasUserMedia() {--}}
-        {{--    //check if the browser supports the WebRTC--}}
-        {{--    return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||--}}
-        {{--        navigator.mozGetUserMedia);--}}
-        {{--}--}}
-
-        {{--if (hasUserMedia()) {--}}
-        {{--    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia--}}
-        {{--        || navigator.mozGetUserMedia;--}}
-
-        {{--    //enabling video and audio channels--}}
-        {{--    navigator.getUserMedia({ video: true, audio: true }, function (stream) {--}}
-        {{--            var audio = document.querySelector('audio');--}}
-
-        {{--            //inserting our stream to the audio tag--}}
-        {{--            audio.src = window.URL.createObjectURL(stream);--}}
-        {{--    }, function (err) {});--}}
-        {{--} else {--}}
-        {{--    alert("WebRTC is not supported");--}}
-        {{--}--}}
-
-        {{--$('audio').on('click', function(){--}}
-        {{--    $.ajax({--}}
-        {{--        url: '{{url('/action/play/0')}}',--}}
-        {{--        method : 'POST',--}}
-        {{--        data: new FormData(this),--}}
-        {{--        processData: false,--}}
-        {{--        contentType: false,--}}
-        {{--        success: function (e){--}}
-        {{--            console.log('success',e);--}}
-        {{--            window.ajaxCallFormData = e;--}}
-        {{--        },--}}
-        {{--        error: function (e){--}}
-        {{--            console.log('error',e);--}}
-        {{--            let message = e.hasOwnProperty('responseJSON') ? e.responseJSON.message : e.responseText;--}}
-        {{--            message = message === '' ? e.statusText : message;--}}
-        {{--        },--}}
-        {{--        complete: function(){--}}
-        {{--            // console.log('data', window.ajaxCallFormData)--}}
-        {{--            if(options.reload){--}}
-        {{--                location.reload();--}}
-        {{--            }--}}
-        {{--        }--}}
-        {{--    })--}}
-        {{--})--}}
 
     </script>
 @endpush
@@ -355,6 +276,10 @@
 
         }
 
+        .input{
+            height: 100%;
+        }
+
         #ZoneInfo{
             color: white;
             background-color: #defffa;
@@ -379,43 +304,5 @@
         .display{
             display: none;
         }
-        /*button{*/
-        /*    margin: 10px 5px;*/
-        /*    border: 1px solid hsl(0, 0%, 70%);*/
-        /*    color: white;*/
-        /*    text-shadow: 1px 1px 0px #0a0a0a ;*/
-        /*}*/
-        /*button:first-child{*/
-        /*    margin-left: 10px;*/
-        /*}*/
-        /*button:last-child{*/
-        /*    margin-right: 10px;*/
-        /*}*/
-
-        /*tr{*/
-        /*    background-color: hsl(0, 0%, 96%);*/
-        /*}*/
-
-        /*.meta{*/
-        /*    !*display: none;*!*/
-        /*}*/
-
-
-
-        /*.record table{*/
-        /*    !*min-width: 50%;*!*/
-        /*    border: 1px solid hsl(0, 0%, 70%);*/
-        /*    !*margin-left: 25vw*!*/
-        /*    background-color: hsl(0, 0%, 70%);*/
-        /*}*/
-        /*td#title{*/
-        /*    width: 100%;*/
-        /*    background-color: hsl(0, 0%, 85%);*/
-        /*    text-align: center;*/
-        /*    border: 1px solid hsl(0, 0%, 70%);*/
-        /*    font-weight: bolder;*/
-        /*    color: white;*/
-        /*    text-shadow: 1px 1px 0px #0a0a0a ;*/
-        /*}*/
     </style>
 @endpush
