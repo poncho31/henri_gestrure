@@ -17,6 +17,7 @@
         "autoprefixer": "^10.4.2",
         "axios": "^0.27",
         "bulma": "^0.9.4",
+        "colors.css": "^3.0.0",
         "css-loader": "^6.7.1",
         "dotenv": "^16.0.3",
         "laravel-echo": "^1.14.0",
@@ -41,6 +42,7 @@
         "font-awesome": "^4.7.0",
         "jquery": "^3.6.1",
         "laravel-mix-polyfill": "^3.0.1",
+        "purecss": "^2.2.0",
         "webpack-mix": "^3.0.0"
     }
 }

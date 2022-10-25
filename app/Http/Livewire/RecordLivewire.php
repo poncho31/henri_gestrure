@@ -37,8 +37,9 @@ class RecordLivewire extends Component
 
     protected function getListeners(): array
     {
+        $user = Auth::user() === null ? 0 : Auth::user()->id;
         return [
-            "user.". Auth::user()->id => '?'
+            "user.". $user=> '?'
         ];
     }
 

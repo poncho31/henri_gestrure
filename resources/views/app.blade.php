@@ -3,7 +3,6 @@
 @section('content')
     {{-- RECORD --}}
     <h3 class="title">Enregistrer</h3>
-
     <div style="margin: 0 1% 0 1%">
         @livewire('record-livewire')
         <hr>

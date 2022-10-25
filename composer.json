@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "ext-apache": "*",
         "beyondcode/laravel-websockets": "^1.13",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/breeze": "1.9.4",
@@ -14,8 +15,8 @@
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
         "ohseesoftware/laravel-vite-manifest": "^1.2",
-        "pusher/pusher-php-server": "^7.2",
-      "ext-apache": "*"
+        "poncho31/pigitools": "^1.0",
+        "pusher/pusher-php-server": "^7.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -68,5 +69,19 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type":"package",
+            "package": {
+                "name": "poncho31/pigitools",
+                "version":"1.0",
+                "source": {
+                    "url": "https://github.com/poncho31/PIGITOOLS.git",
+                    "type": "git",
+                    "reference":"master"
+                }
+            }
+        }
+    ]
 }
