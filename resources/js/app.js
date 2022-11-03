@@ -1,7 +1,8 @@
 window.$ = window.jquery  = require( "jquery" );
 import './bootstrap';
-
-
+// window.AjaxCall = require('./../../vendor/poncho31/pigitools/resources/Sources/js/Ajax/Ajax.js')
+import Ajax from './../../vendor/poncho31/pigitools/resources/Sources/js/Ajax/Ajax.js'
+Ajax.requestInit();
 
 // OWN CLASS
 import Record from "./record";

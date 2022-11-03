@@ -2473,16 +2473,20 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _record__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./record */ "./resources/js/record.js");
-/* harmony import */ var _general__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./general */ "./resources/js/general.js");
+/* harmony import */ var _vendor_poncho31_pigitools_resources_Sources_js_Ajax_Ajax_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../vendor/poncho31/pigitools/resources/Sources/js/Ajax/Ajax.js */ "./vendor/poncho31/pigitools/resources/Sources/js/Ajax/Ajax.js");
+/* harmony import */ var _record__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./record */ "./resources/js/record.js");
+/* harmony import */ var _general__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./general */ "./resources/js/general.js");
 window.$ = window.jquery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
- // OWN CLASS
+ // window.AjaxCall = require('./../../vendor/poncho31/pigitools/resources/Sources/js/Ajax/Ajax.js')
 
 
-window.recordFunction = new _record__WEBPACK_IMPORTED_MODULE_1__["default"]();
+_vendor_poncho31_pigitools_resources_Sources_js_Ajax_Ajax_js__WEBPACK_IMPORTED_MODULE_1__["default"].requestInit(); // OWN CLASS
+
+
+window.recordFunction = new _record__WEBPACK_IMPORTED_MODULE_2__["default"]();
 
 window.ajaxCallFormData = [];
-window.general = new _general__WEBPACK_IMPORTED_MODULE_2__["default"]();
+window.general = new _general__WEBPACK_IMPORTED_MODULE_3__["default"]();
 general.cleanSearch();
 general.ajaxSetup();
 general.select2(); // Init form for JOB
@@ -3078,6 +3082,134 @@ var Record = /*#__PURE__*/function () {
 
   return Record;
 }();
+
+
+
+/***/ }),
+
+/***/ "./vendor/poncho31/pigitools/resources/Sources/js/Ajax/Ajax.js":
+/*!*********************************************************************!*\
+  !*** ./vendor/poncho31/pigitools/resources/Sources/js/Ajax/Ajax.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Ajax)
+/* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+var Ajax = /*#__PURE__*/function () {
+  function Ajax() {
+    _classCallCheck(this, Ajax);
+  }
+
+  _createClass(Ajax, null, [{
+    key: "requestInit",
+    value: function requestInit() {
+      $(document).on('submit change', 'form.job', function (event) {
+        event.preventDefault();
+        var options = {
+          isFullyFilledForm: !$(this).hasClass('nocheck_empty_formfields'),
+          reload: $(this).hasClass('refresh_page'),
+          updateAutomaticOnChange: $(this).hasClass('updateAutomaticOnChange'),
+          toastTime: 10000
+        };
+        console.log("Ajax request init options : ", options);
+
+        if (event.type === 'change' && options.updateAutomaticOnChange) {
+          Ajax.ajaxCallForm(this, event, options);
+        } else if (event.type === 'submit') {
+          Ajax.ajaxCallForm(this, event, options);
+        }
+      });
+    }
+  }, {
+    key: "ajaxSetup",
+    value: function ajaxSetup() {
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+    }
+    /**
+     * @param {this} $this this
+     * @param {Event} event
+     * @param options
+     */
+
+  }, {
+    key: "ajaxCallForm",
+    value: function ajaxCallForm($this, event) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+        isFullyFilledForm: true,
+        reload: false,
+        toastTime: this.toastTime
+      };
+      console.log($($this));
+      var action = (0,lodash__WEBPACK_IMPORTED_MODULE_0__.trim)($($this).find('input[type="submit"]').attr('value')) + "'"; // let isReloadPage = $($this).hasClass('reload_page_after_job');
+
+      if (confirm("Voulez-vous lancer l'action '" + action)) {
+        this.ajaxSetup(); // OPTIONS
+
+        var fullyFilled = true;
+
+        if (options.isFullyFilledForm) {
+          var formArrayKeyValue = this.formSerializeArrayKeyValue($($this));
+          fullyFilled = formArrayKeyValue.fullyFilled;
+        }
+
+        if (fullyFilled) {
+          // AJAX ACTIONS
+          $.ajax({
+            url: $($this).attr('action'),
+            method: $($this).attr('method'),
+            data: new FormData($this),
+            processData: false,
+            contentType: false,
+            success: function success(e) {
+              console.log('success', e);
+              window.ajaxCallFormData = e;
+              showToast(e.toString(), "Job / Action : " + action, 'success', options.toastTime);
+            },
+            error: function error(e) {
+              console.log('error', e);
+              var message = e.hasOwnProperty('responseJSON') ? e.responseJSON.message : e.responseText;
+              message = message === '' ? e.statusText : message;
+              showToast(message, "Job / Action : " + action, 'danger', options.toastTime);
+            },
+            complete: function complete() {
+              // console.log('data', window.ajaxCallFormData)
+              if (options.reload) {
+                location.reload();
+              }
+            }
+          });
+        } else {
+          showToast('Les entrées du formulaire doivent être complétées.', "Job / Action : " + action, 'warning', options.toastTime);
+        }
+      }
+    }
+  }]);
+
+  return Ajax;
+}();
+
+_defineProperty(Ajax, "toastTime", 5000);
 
 
 

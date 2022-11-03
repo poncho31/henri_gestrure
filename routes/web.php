@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::match(['GET'], '/'                      , [AppController::class,    'index'       ]);
 Route::match(['POST'],'/recorder/{action}/{id}', [RecordController::class, 'recordAudio' ]);
 Route::match(['POST'],'/action/{action}/{id}'  , [RecordLivewire::class,     'test'      ]);
-Route::match(['POST'],'/stream/audio'          , [AppController::class,    'streamaudio' ])->name('stream.audio');
+Route::match(['POST'],'/stream/audio/{id}'          , [AppController::class,    'streamaudio' ])->name('stream.audio');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -28,10 +28,9 @@ class AppController extends Controller
         return view("app", compact('records'));
     }
 
-    public function streamaudio()
+    public function streamaudio(Request $request, int $id)
     {
-        $record = new Record();
-        $record->fullpath =  public_path('files/audio/template.mp3');
+        $record = (new Record())->find($id);
         return $stream = (new Player())->streamVlc($record);
     }
 }

@@ -12,8 +12,11 @@ class Player
     public function streamVlc(Record $record): Record
     {
 
+        dump("localhost:8080/stream/$record->id");
         // basename($record->fullpath) alors une liste,  si basename($record->path) alors lis le dossier
-        $record->command = "vlc $record->fullpath --sout=\"#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:http{mux=mp3,dst=:8080/stream/$record->name?pkt_size=1316}\" ";
+//        $cmd = "vlc -vvv $record->fullpath --sout='#transcode{vcodec=none,acodec=mp3,vb=800,ab=128}: http{access=http,mux=mp3,dst=localhost:8080/stream/$record->id}' ";
+        $record->command = "vlc $record->fullpath --sout=\"#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:http{mux=mp3,dst=localhost:8080/stream/$record->id}\" --sout-keep --loop";
+//        $record->command = $cmd;
         $record->options =['execution'=> ['vlc'=>['cmd', $record->command]]];
         $record = self::proc_open_PlayerType($record);
         $record->update();

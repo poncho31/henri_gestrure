@@ -14961,53 +14961,53 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 /*My GRID LAYOUT TEMPLATE */
 .gridRecorder .name {
     grid-area: name;
-    background-color: indianred;
+    /*background-color: indianred;*/
 }
 .gridRecorder .process {
     grid-area: process;
-    background-color: olive;
+    /*background-color: olive;*/
 }
 .gridRecorder .category {
     grid-area: category;
 }
 .gridRecorder .execution {
     grid-area: execution;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 .gridRecorder .path {
     grid-area: path;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 .gridRecorder .type {
     grid-area: type;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 .gridRecorder .input1 {
     grid-area: input1;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 
 .gridRecorder .record {
     grid-area: record;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 .gridRecorder .information {
     grid-area: information;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 .gridRecorder .player {
     grid-area: player;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 
 .gridRecorder .graphPlayer {
     grid-area: graphPlayer;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 
 .gridRecorder .output {
     grid-area: output;
-    background-color: #00b89c;
+    /*background-color: #00b89c;*/
 }
 
 .gridRecorder .firstRow{
@@ -15020,19 +15020,24 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 .gridRecorder {
     display: grid;
     grid-template-areas:
-    'name    name        process category category     execution      path        type        input1'
-    'record  information player  player   graphPlayer  graphPlayer    graphPlayer graphPlayer graphPlayer'
-    'output  output      output  output   graphPlayer  graphPlayer    graphPlayer graphPlayer graphPlayer';
+    'name         name    process  category category     execution      path         type         input1'
+    'record       player  player   player   graphPlayer  graphPlayer    graphPlayer  graphPlayer  graphPlayer'
+    'information  player  player   player   graphPlayer  graphPlayer    graphPlayer  graphPlayer  graphPlayer'
+    'output       output  output   output   graphPlayer  graphPlayer    graphPlayer  graphPlayer  graphPlayer'
+    'output       output  output   output   graphPlayer  graphPlayer    graphPlayer  graphPlayer  graphPlayer';
     gap: 2px;
-    background-color: indianred;
-    padding: 2px;
+    /*background-color: lightyellow;*/
+    /*border: solid 1px black;*/
+    /*padding: 2px;*/
 }
 
 .gridRecorder > div {
-    background-color: rgba(255, 255, 255, 0.5);
+    border: solid 1px black;
+    /*background-color: rgba(255, 255, 255, 0.5);*/
     text-align: center;
-    padding: 2px 0;
+    /*padding: 2px 0;*/
 }
+
 
 
 /* NORMALIZE */

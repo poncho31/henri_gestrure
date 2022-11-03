@@ -66,9 +66,11 @@ class AudioRecording
 
     public function readAudio(Record $record): void
     {
-        dump("read audio");
-        dump("GET PID : $record->processId");
-        shell_exec("vlc -I dummy --play-and-stop $record->fullpath");// --playlist-enqueu
+//        dump("read audio");
+//        dump("GET PID : $record->processId");
+//        shell_exec("vlc -I dummy --play-and-stop $record->fullpath");// --playlist-enqueu
+
+        // TODO : voir section (new Player)->streamVlc($record)
     }
 
     public function stopRecord(Record $record): ?string
