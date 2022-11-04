@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Events\BroadcastEventToUserNow as Event;
 use App\Models\Record;
 use App\Sources\AudioPlayer\Players\Player;
+use App\Sources\AudioPlayer\WaveformVisualizer\WaveformVisualizer;
 use App\Sources\AudioRecording\AudioRecording;
 use App\Sources\AudioRecording\Commands\PowershellCommand;
 use App\Sources\AudioRecording\Records\Recorder;
@@ -72,17 +73,13 @@ class RecordLivewire extends Component
         ob_end_clean();
     }
 
-    public function audioWaveformVisualizer(){
-        $ffmpeg_image_audio_visualizer = "ffmpeg -i template.mp3 -lavfi showspectrumpic=s=1024x1024 template.png";
-        $ffmpeg_raw_audio_data_8000    = "ffmpeg -i template.mp3 -ac 1 -filter:a aresample=8000 -map 0:a -c:a pcm_s16le -f data -";
-        $raw_audio_data = Recorder::shell_exec_RecordType($ffmpeg_raw_audio_data_8000);
-        $hexa_audio_data =  bin2hex($raw_audio_data);
-        dd($hexa_audio_data);
+    public function audioWaveformVisualizer(Request $request, $id): object|array
+    {
+        $this->recordModel    = (new Record)->find($id);
+        return WaveformVisualizer::generate($this->recordModel->fullpath);
     }
 
-    public function streamAudio(string $type='vlc'){ // or streamAudio ?
-
-//        $url = "http://localhost:8080/stream/$record->name";
+    public function streamAudio(string $type='vlc'){
         if($type=='vlc'){
             (new Player())->streamVlc($this->recordModel);
         }

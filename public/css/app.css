@@ -15002,12 +15002,16 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
 
 .gridRecorder .graphPlayer {
     grid-area: graphPlayer;
-    /*background-color: #00b89c;*/
+    background-color: #00b89c;
 }
 
 .gridRecorder .output {
+    position: relative;
+    /*max-width: 650px;*/
+    /*max-height: 350px;*/
+    overflow: scroll;
     grid-area: output;
-    /*background-color: #00b89c;*/
+    background-color: #0078b8;
 }
 
 .gridRecorder .firstRow{

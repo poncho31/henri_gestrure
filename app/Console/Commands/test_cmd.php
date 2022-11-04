@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Record;
 use App\Sources\AudioPlayer\AudioPlayer;
 use App\Sources\AudioPlayer\Players\Player;
+use App\Sources\AudioPlayer\WaveformVisualizer\WaveformVisualizer;
 use App\Sources\AudioRecording\Records\Recorder;
 use Illuminate\Console\Command;
 use function React\Promise\Stream\first;
@@ -25,6 +26,7 @@ class test_cmd extends Command
      */
     protected $description = 'Command description';
 
+
     /**
      * Execute the console command.
      *
@@ -32,6 +34,8 @@ class test_cmd extends Command
      */
     public function handle()
     {
+
+        WaveformVisualizer::generate(public_path('files/audio/template.mp3'));
         $path = public_path('files\audio\template.mp3');
         $ffmpeg_raw_audio_data_8000    = "ffmpeg -i \"$path\" -ac 1 -filter:a aresample=1500 -map 0:a -c:a pcm_s16le -f data -";
 

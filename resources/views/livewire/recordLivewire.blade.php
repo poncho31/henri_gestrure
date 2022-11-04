@@ -139,25 +139,19 @@
                  </span>
         </div>
 {{--        GRAPHE--}}
-        <div class="secondRow graphPlayer button input is-success">
-            <label for="audioGraph{{$recordModel->id}}">
-                ZONE CHART AUDIO PLAYER
-            </label>
+        <div class="secondRow graphPlayer">
+            <div id="audioGraph{{$recordModel->id ?? 0}}">
+                <canvas id="canvas{{$recordModel->id ?? 0}}">
+
+                </canvas>
+            </div>
         </div>
 {{--        OUTPUT--}}
         <div class="thirdRow output" id="zo">
-            <label for="output{{$recordModel->id??0}}"></label>
-                <code style="overflow: scroll"
-                >
-{{--                    <label for="output{{$recordModel->id ?? 0}}">--}}
-                        <textarea
-                            id="output{{$recordModel->id ?? 0}}"
-                            style="width: 100%; height: 100%"
-                        >
-                            ZONE OUTPUT N° {{$recordModel->id}}
-                            {{$output}}
-                        </textarea>
-{{--                    </label>--}}
+                <code
+                    id="output{{$recordModel->id ?? 0}}"
+                >ZONE OUTPUT N° {{$recordModel->id ?? 0}}
+                    {{$output}}
             </code>
 
 
@@ -180,7 +174,7 @@
             let id = '{{$recordModel->id ?? 0}}'
 
             let audioElement = document.createElement('audio');
-            audioElement.id = 'audioId'+id
+            audioElement.id  = 'audioId'+id
 
             let lenght      = $("#length"+id)
             let source      = $("#source"+id)
@@ -191,7 +185,9 @@
             let pause       = $("#pause"+id)
             let play        = $("#play"+id)
             let output      = $('#output' + id)
+
             let isPlaying   = audioElement.currentTime
+            {{--let audioGraph  = $('#audioGraph{{$recordModel->id}}')--}}
 
             // EVENT LISTENER
             audioElement.addEventListener("canplay",function(){
@@ -242,28 +238,94 @@
 
 
         async function ajaxAudio(audioElement, url, id){
-            return await $.ajax({
+            let audioGraph  = $('#audioGraph'+id)
+            let output      = $('#output' + id)
+            let canvas      = document.getElementById('canvas' + id)
+
+            await $.ajax({
                 url: url,
                 type: "POST",
                 success: function (data) {
                     // console.log(data)
-                    $('#output' + id).append(data)
+                    output.append(data)
                     audioElement.id = id
                     audioElement.setAttribute('src', 'http://localhost:8080/stream/' + id);
                     // audioElement.setBuffer()
                     audioElement.addEventListener('ended', function () {
                         this.play()
                     }, false)
-                    audioElement.pause()
-                    audioElement.load()
                     audioElement.play()
                     audioElement.className='isRecord'+id
                 },
                 error: function (error) {
                     console.log(error)
-                    $('#output' + id).append(error);
+                    output.append(error);
+                }
+            });
+
+            // GRAPH : audioGraph
+            await $.ajax({
+                url: '{{url('/audio/wave/')}}/'+id,
+                type: "POST",
+                success: function (data) {
+                    console.log("AUDIO WAVE !",data)
+
+                    //DRAW GRAPH GERE
+                    drawGraph(data.data, canvas)
+                    // DRAW GRAPH
+
+                    console.log(audioGraph);
+
+                },
+                error: function (error) {
+                    console.log(error)
+                    output.append(error);
                 }
             });
         }
+
+
+        function drawGraph(data, canvas){
+            console.log("canavas", canvas)
+            const dpr = window.devicePixelRatio || 1;
+            const padding = 20;
+            canvas.width = canvas.offsetWidth * dpr;
+            canvas.height = (canvas.offsetHeight + padding * 2) * dpr;
+            const ctx = canvas.getContext("2d");
+            ctx.scale(dpr, dpr);
+            ctx.translate(0, canvas.offsetHeight / 2 + padding); // Set Y = 0 to be in the middle of the canvas
+
+            // draw the line segments
+            const width = "1000"
+            data.forEach(function(k, v){
+                drawLineSegment(ctx, k, v, width, (k + 1) % 2)
+                //     console.log(k, v)
+                })
+
+
+            //
+            // for (let i = 0; i < normalizedData.length; i++) {
+            //     const x = width * i;
+            //     let height = normalizedData[i] * canvas.offsetHeight - padding;
+            //     if (height < 0) {
+            //         height = 0;
+            //     } else if (height > canvas.offsetHeight / 2) {
+            //         height = height > canvas.offsetHeight / 2;
+            //     }
+            //     drawLineSegment(ctx, x, height, width, (i + 1) % 2);
+            // }
+        }
+
+        function drawLineSegment(ctx, x, y, width, isEven) {
+            ctx.lineWidth = 1; // how thick the line is
+            ctx.strokeStyle = "#fff"; // what color our line is
+            ctx.beginPath();
+            y = isEven ? y : -y;
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, y);
+            ctx.arc(x + width / 2, y, width / 2, Math.PI, 0, isEven);
+            ctx.lineTo(x + width, 0);
+            ctx.stroke();
+        };
     </script>
 @endpush
